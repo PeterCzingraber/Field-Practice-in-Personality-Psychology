@@ -9,25 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 #Libraries
 ```{r}
@@ -36,6 +18,8 @@ library(dplyr)
 library(ggplot2)
 library(readxl)
 library(writexl)
+library(psych)
+library(knitr)
 ```
 
 #Loading data
@@ -65,6 +49,21 @@ processed_data <- Filtered_data %>%
 
 write.csv(processed_data, "data_frame.csv")
 ```
+
+#Checking the internal consistency of the rumination scale
+```{r}
+rumination_df = processed_data [,26:33]
+alpha_result <- alpha(rumination_df)
+print(alpha_result)
+```
+
+#Cronbach alpha table
+```{r}
+item_alpha = alpha_result$item.stats
+summary_table = item_alpha[, c("n", "raw.r","r.drop", "mean", "sd")]
+kable(summary_table, digits = 3)
+```
+
 
 #Basic analysis
 ```{r}
